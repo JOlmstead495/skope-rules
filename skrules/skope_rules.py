@@ -94,6 +94,17 @@ class SkopeRules(BaseEstimator):
               `ceil(min_samples_split * n_samples)` are the minimum
               number of samples for each split.
 
+    min_samples_leaf : int, float, optional (default=1)
+        The minimum number of samples required to be at a leaf node.
+        A split point at any depth will only be considered if it leaves at least
+        `min_samples_leaf` training samples in each of the left and right branches.
+        This may have the effect of smoothing the model, especially in regression.
+
+        - If int, then consider `min_samples_leaf` as the minimum number.
+        - If float, then min_samples_leaf is a fraction and `ceil(min_samples_leaf * n_samples)`
+        are the minimum number of samples for each node.
+
+
     n_jobs : integer, optional (default=1)
         The number of jobs to run in parallel for both `fit` and `predict`.
         If -1, then the number of jobs is set to the number of cores.
@@ -151,7 +162,8 @@ class SkopeRules(BaseEstimator):
                  min_samples_split=2,
                  n_jobs=1,
                  random_state=None,
-                 verbose=0):
+                 verbose=0
+                 min_samples_leaf=1):
         self.precision_min = precision_min
         self.recall_min = recall_min
         self.feature_names = feature_names
@@ -166,6 +178,7 @@ class SkopeRules(BaseEstimator):
         self.max_depth_duplication = max_depth_duplication
         self.max_features = max_features
         self.min_samples_split = min_samples_split
+        self.min_samples_leaf=min_samples_leaf
         self.n_jobs = n_jobs
         self.random_state = random_state
         self.verbose = verbose
@@ -268,7 +281,8 @@ class SkopeRules(BaseEstimator):
                 base_estimator=DecisionTreeClassifier(
                     max_depth=max_depth,
                     max_features=self.max_features,
-                    min_samples_split=self.min_samples_split),
+                    min_samples_split=self.min_samples_split,
+                    min_samples_leaf=self.min_samples_leaf),
                 n_estimators=self.n_estimators,
                 max_samples=self.max_samples_,
                 max_features=self.max_samples_features,
@@ -285,7 +299,8 @@ class SkopeRules(BaseEstimator):
                 base_estimator=DecisionTreeRegressor(
                     max_depth=max_depth,
                     max_features=self.max_features,
-                    min_samples_split=self.min_samples_split),
+                    min_samples_split=self.min_samples_split,
+                    min_samples_leaf=self.min_samples_leaf),
                 n_estimators=self.n_estimators,
                 max_samples=self.max_samples_,
                 max_features=self.max_samples_features,

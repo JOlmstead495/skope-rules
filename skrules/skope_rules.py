@@ -162,7 +162,7 @@ class SkopeRules(BaseEstimator):
                  min_samples_split=2,
                  n_jobs=1,
                  random_state=None,
-                 verbose=0
+                 verbose=0,
                  min_samples_leaf=1):
         self.precision_min = precision_min
         self.recall_min = recall_min
